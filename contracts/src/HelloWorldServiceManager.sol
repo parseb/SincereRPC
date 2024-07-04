@@ -17,7 +17,7 @@ import "./IHelloWorldServiceManager.sol";
 contract HelloWorldServiceManager is ECDSAServiceManagerBase, IHelloWorldServiceManager, Pausable {
     using BytesLib for bytes;
     using ECDSAUpgradeable for bytes32;
-
+    
     /* STORAGE */
 
     /// maps hash of request to hash of response
