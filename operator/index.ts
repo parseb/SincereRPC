@@ -25,9 +25,7 @@ const signAndRespondToTask = async (taskIndex: number, taskCreatedBlock: number,
     const messageBytes = ethers.utils.arrayify(messageHash);
     const signature = await wallet.signMessage(messageBytes);
 
-    console.log(
-        `Signing and responding to task ${taskIndex}`
-    )
+    console.log(`Signing and responding to task ${taskIndex}`);
 
     const tx = await contract.respondToTask(
         { name: taskName, taskCreatedBlock: taskCreatedBlock },
@@ -39,9 +37,9 @@ const signAndRespondToTask = async (taskIndex: number, taskCreatedBlock: number,
 };
 
 const registerOperator = async () => {
-    console.log("check")
+    console.log("Registering operator...");
     const tx1 = await delegationManager.registerAsOperator({
-        earningsReceiver: await wallet.address,
+        earningsReceiver: await wallet.getAddress(),
         delegationApprover: "0x0000000000000000000000000000000000000000",
         stakerOptOutWindowBlocks: 0
     }, "");
@@ -51,30 +49,26 @@ const registerOperator = async () => {
     const salt = ethers.utils.hexlify(ethers.utils.randomBytes(32));
     const expiry = Math.floor(Date.now() / 1000) + 3600; // Example expiry, 1 hour from now
 
-    // Define the output structure
     let operatorSignature = {
         expiry: expiry,
         salt: salt,
         signature: ""
     };
 
-    // Calculate the digest hash using the avsDirectory's method
     const digestHash = await avsDirectory.calculateOperatorAVSRegistrationDigestHash(
-        wallet.address, 
+        await wallet.getAddress(), 
         contract.address, 
         salt, 
         expiry
     );
 
-    // Sign the digest hash with the operator's private key
     const signingKey = new ethers.utils.SigningKey(process.env.PRIVATE_KEY!);
     const signature = signingKey.signDigest(digestHash);
     
-    // Encode the signature in the required format
     operatorSignature.signature = ethers.utils.joinSignature(signature);
 
     const tx2 = await registryContract.registerOperatorWithSignature(
-        wallet.address,
+        await wallet.getAddress(),
         operatorSignature
     );
     await tx2.wait();
@@ -93,12 +87,12 @@ const monitorNewTasks = async () => {
 };
 
 const main = async () => {
-    await registerOperator();
-    monitorNewTasks().catch((error) => {
-        console.error("Error monitoring tasks:", error);
-    });
+    try {
+        await registerOperator();
+        await monitorNewTasks();
+    } catch (error) {
+        console.error("Error in main function:", error);
+    }
 };
 
-main().catch((error) => {
-    console.error("Error in main function:", error);
-});
+main();

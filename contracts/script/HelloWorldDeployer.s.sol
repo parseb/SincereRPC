@@ -25,11 +25,13 @@ import "forge-std/Script.sol";
 import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 
+import {ReturnsHello} from '../src/ReturnsHello.sol';
+
 // # To deploy and verify our contract
 // forge script script/HelloWorldDeployer.s.sol:HelloWorldDeployer --rpc-url $RPC_URL  --private-key $PRIVATE_KEY --broadcast -vvvv
 contract HelloWorldDeployer is Script, Utils {
     // ERC20 and Strategy: we need to deploy this erc20, create a strategy for it, and whitelist this strategy in the strategymanager
-
+    
     ERC20Mock public erc20Mock;
     StrategyBaseTVLLimits public erc20MockStrategy;
 
@@ -43,7 +45,14 @@ contract HelloWorldDeployer is Script, Utils {
     HelloWorldServiceManager public helloWorldServiceManagerProxy;
     HelloWorldServiceManager public helloWorldServiceManagerImplementation;
 
+    address public HelloWorldAddress;
     function run() external {
+        
+        HelloWorldAddress = address(new ReturnsHello());
+
+        console.log("####################################");
+        console.log("###### ::::: HELLO WORLD ADDRESS --> : ",HelloWorldAddress );
+
         // Eigenlayer contracts
         string memory eigenlayerDeployedContracts = readOutput("eigenlayer_deployment_output");
         IStrategyManager strategyManager =
