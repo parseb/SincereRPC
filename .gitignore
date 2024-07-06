@@ -12,7 +12,7 @@ dist/
 .idea/
 
 # Ignore TypeScript build artifacts
-*.js
+
 *.js.map
 *.d.ts
 
