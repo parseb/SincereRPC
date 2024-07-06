@@ -25,6 +25,9 @@ contract HelloWorldServiceManager is ECDSAServiceManagerBase, IHelloWorldService
 
     mapping(address => mapping(bytes32 => bytes)) public allCallResponses;
 
+    event NewRPCCallDeclared(bytes32 indexed callIntegrityHash, CallAnDContextRPC callAndResponse);
+    event AuthenticatedRPCResponseHash(bytes32 indexed callIntegrityHash, address operator);
+
     /* MODIFIERS */
     modifier onlyOperator() {
         require(ECDSAStakeRegistry(stakeRegistry).operatorRegistered(msg.sender) == true, "Operator must be the caller");

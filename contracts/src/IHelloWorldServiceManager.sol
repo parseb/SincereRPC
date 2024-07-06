@@ -11,8 +11,7 @@ interface IHelloWorldServiceManager {
     }
 
     // EVENTS
-    event NewRPCCallDeclared(bytes32 indexed callIntegrityHash, CallAnDContextRPC callAndResponse);
-    event AuthenticatedRPCResponseHash(bytes32 indexed callIntegrityHash, address operator);
+
 
     function createNewCall(CallAnDContextRPC memory callToRPC, bytes32 callIntegrityHash) external;
 
