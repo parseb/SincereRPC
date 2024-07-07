@@ -1,3 +1,24 @@
+## About
+
+### Actively validated RPC static call endpoint service.
+
+This POC is a fork of Eigenlayer's Hello World AVS repo.   
+    
+
+- The operator works and monitors for RPC call commitments.   
+- The task spammer (activity simulator) sends validated static data requests to the fleek function.   
+- The fleek function errors out since it does not support ethers, core dependency for easy management of rpc calls to holesky network.   
+
+
+Contracts:
+- HelloWorldServiceManager (`0xb29C4dC323ee85A16fB06D48F367f92ae99B730F`) - Recieves requests and broadcasts the validation expectation  
+- ReturnsHello (`0x9b933369a75f484F10A1765588bc7B1E81Ab712d`) - Mock contract that allways returns the same string on any calldata via fallback(). 
+   
+   
+Issue:
+The user-facing endpoint that brings Eigenlayer, the user data request and the contract does not currently work due to an incompatibility.
+
+
 # Hello World AVS
 
 Welcome to the Hello World AVS.
